@@ -28,7 +28,12 @@ private:
     double xEnd;
     double yBegin;
     double yEnd;
-    int N = 10000;
+    int N = 1000;
     double dx;
+
+    void createSinVect();
+    void createCosVect();
+    void createTgVect ();
+
 };
 #endif // MAINWINDOW_H

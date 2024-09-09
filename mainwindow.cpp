@@ -40,21 +40,14 @@ void MainWindow::on_pushButton_2_clicked()
 
     dx = (xEnd-xBegin)/N;
 
-    //Q_UNUSED(yBegin);
-    //Q_UNUSED(yEnd);
 
+    if(ui->radioButton->isChecked())
+        createSinVect();
+    if(ui->radioButton_2->isChecked())
+        createCosVect();
+    if(ui->radioButton_3->isChecked())
+        createTgVect();
 
-    for(int i = 0; i < N; i++){
-        double xValue = xBegin + (double)i*dx;
-        double yValue = tan(xValue);
-        if(ui->radioButton->isChecked())
-            yValue = cos(xValue);
-        else if(ui->radioButton_2->isChecked())
-            yValue = sin(xValue);
-        x.push_back(xValue);
-        y.push_back(yValue);
-        qDebug() << xValue << yValue;
-    }
     ui->field->addGraph();
     ui->field->graph(0)->addData(x,y);
     ui->field->replot();
@@ -62,5 +55,57 @@ void MainWindow::on_pushButton_2_clicked()
     y.erase(y.begin(), y.end());
     ui->field->graph(0)->data()->clear();
 }
+
+void MainWindow::createSinVect(){
+    for(int i = 0; i < N; i++){
+        double xValue = xBegin + (double)i*dx;
+        double yValue = sin(xValue);
+        x.push_back(xValue);
+        y.push_back(yValue);
+//        qDebug() << xValue << yValue;
+    };
+}
+
+
+void MainWindow::createCosVect(){
+    for(int i = 0; i < N; i++){
+        double xValue = xBegin + (double)i*dx;
+        double yValue = cos(xValue);
+        x.push_back(xValue);
+        y.push_back(yValue);
+//        qDebug() << xValue << yValue;
+    }
+}
+/*there is more efficient way to do it:
+ *for(double xValue = xBegin; xValue <=xEnd; xValue+=dx){
+ *  double yValue = cos(xValue);
+ *  x.push_back(xValue);
+ *  y.push_back(yValue);
+ *}
+ */
+
+void MainWindow::createTgVect(){
+    for(int i = 0; i < N; i++){
+        double xValue = xBegin + (double)i*dx;
+        double yValue = tan(xValue);
+        if(tan(xValue+dx) *  tan(xValue+2*dx) < -5){
+            qDebug()<< xValue<<qQNaN();
+            x.push_back(xValue);
+            y.push_back(999);
+            x.push_back(xValue+dx);
+            y.push_back(qQNaN());
+            x.push_back(xValue+2*dx);
+            y.push_back(-999);
+
+            i+=2;
+            continue;
+        }
+        x.push_back(xValue);
+        y.push_back(yValue);
+        qDebug() << xValue << yValue;
+    }
+}
+
+
 
 
